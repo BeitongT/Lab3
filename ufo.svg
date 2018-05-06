@@ -1,0 +1,49 @@
+<svg id="Layer_7" data-name="Layer 7" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 3301.14 1481.78">
+<defs>
+<style>
+.cls-1{fill:url(#linear-gradient);}
+.cls-2{fill:url(#linear-gradient-2);}
+.cls-3{fill:url(#linear-gradient-3);}
+.cls-4{fill:url(#linear-gradient-4);}
+</style>
+<linearGradient id="linear-gradient" y1="795.14" x2="3301.14" y2="795.14" gradientUnits="userSpaceOnUse">
+<stop offset="0" stop-color="#ffd3d4"/>
+<stop offset="0.07" stop-color="#f9b5b6"/>
+<stop offset="0.19" stop-color="#f08686"/>
+<stop offset="0.32" stop-color="#e85d5d"/>
+<stop offset="0.45" stop-color="#e13b3b"/>
+<stop offset="0.58" stop-color="#dc2121"/>
+<stop offset="0.71" stop-color="#d90f0f"/>
+<stop offset="0.85" stop-color="#d70404"/>
+<stop offset="1" stop-color="#d60000"/>
+</linearGradient>
+<linearGradient id="linear-gradient-2" x1="1037.87" y1="204.28" x2="2885.16" y2="957.51" gradientUnits="userSpaceOnUse">
+<stop offset="0" stop-color="#d60000"/>
+<stop offset="0.13" stop-color="#d70303"/>
+<stop offset="0.22" stop-color="#d80b0b"/>
+<stop offset="0.29" stop-color="#db1a1a"/>
+<stop offset="0.35" stop-color="#df2e2f"/>
+<stop offset="0.41" stop-color="#e44949"/>
+<stop offset="0.47" stop-color="#eb6a6a"/>
+<stop offset="0.52" stop-color="#f29192"/>
+<stop offset="0.56" stop-color="#fbbdbe"/>
+<stop offset="0.59" stop-color="#ffd3d4"/>
+<stop offset="1" stop-color="#ffd3d4"/>
+</linearGradient>
+<linearGradient id="linear-gradient-3" x1="987.6" y1="1100.35" x2="1641.63" y2="1100.35" gradientUnits="userSpaceOnUse">
+<stop offset="0" stop-color="#ffd3d4"/>
+<stop offset="0.07" stop-color="#fbc0c1"/>
+<stop offset="0.32" stop-color="#ee7c7d"/>
+<stop offset="0.55" stop-color="#e44747"/>
+<stop offset="0.75" stop-color="#dc2020"/>
+<stop offset="0.9" stop-color="#d80909"/>
+<stop offset="1" stop-color="#d60000"/>
+</linearGradient>
+<linearGradient id="linear-gradient-4" x1="1151.11" y1="225.14" x2="2398.88" y2="225.14" xlink:href="#linear-gradient-2"/>
+</defs>
+<title>ufo</title>
+<path class="cls-1" d="M190.88,110.67s-352,27.35-100,330.49c0,0,747.77,893.46,2864,1039.33,0,0,779-4.56,0-515.11C2954.91,965.38,1462.16,78,190.88,110.67Z" />
+<path class="cls-2" d="M84.66,148.81S517.9-78.51,1151.11,26.34c0,0,1149.77,209.69,1658,697.44,0,0,201.05,180.56,390,429.88,0,0-348.24-357.45-1531.41-772C1667.74,381.64,538.73-2.22,84.66,148.81Z" />
+<path class="cls-3" d="M951.15,860.53s8.33,264.39,508.23,428.5c0,0,393,145.86,670.69-30.4C2130.07,1258.63,1605.19,799.76,951.15,860.53Z"/>
+<path class="cls-4" d="M1151.11,35.46s200-100.29,695.7,36.47c0,0,425.14,136.75,552.08,378.35C2398.88,450.28,2157.15,267.94,1151.11,35.46Z"/>
+</svg>

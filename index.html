@@ -1,38 +1,102 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<title>Lab3</title>
-	<script src="https://d3js.org/d3.v4.min.js"></script>
-</head>
-<style type="text/css">
-	svg {
-		border: solid #ccc 1px; 
-	}
+<meta charset="utf-8">
+<style>
+  body {
+    background: #000000;
+  }
+
+  .stroke {
+    fill: none;
+    stroke: #000;
+    stroke-width: 3px;
+  }
+
+  .fill {
+    fill: rgb(10, 10, 10);
+  }
+
+  .graticule {
+    fill: none;
+    stroke: rgb(131, 131, 131);
+    stroke-width: .5px;
+    stroke-opacity: .5;
+  }
+
+
+  .country {
+    fill: rgba(255, 255, 255, 0.014);
+    stroke: rgba(255, 255, 255, 0.11);
+    stroke-width: 1px;
+  }
+
+  .country.code840 {
+    fill: url("#RadialGradient");
+    stroke: rgb(131, 14, 14);
+    stroke-width: 1px;
+  }
+  #ufoLine{
+    height: 800px;
+  }
+
+  #ufo {
+    margin: auto;
+    width: 300px;
+    height: 200px;
+    filter: drop-shadow( -5px -5px 5px rgb(131, 14, 14));
+    transform: rotate(-20deg);
+    -webkit-animation: ufo 5s linear 2s infinite alternate;
+    /* Safari 4.0 - 8.0 */
+    animation: ufo 5s linear 2s infinite alternate;
+  }
+
+  /* Safari 4.0 - 8.0 */
+
+  @-webkit-keyframes ufo {
+    0% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(10deg);
+    }
+    50% {
+      transform: rotate(20deg)
+    }
+    75% {
+      transform: rotate(10deg)
+    }
+    100% {
+      transform: rotate(0deg)
+    }
+  }
+
+  /* Standard syntax */
+
+  @keyframes ufo {
+    0% {
+      transform: rotate(-20deg);
+    }
+    25% {
+      transform: rotate(-18deg);
+    }
+    50% {
+      transform: rotate(-15deg)
+    }
+    75% {
+      transform: rotate(-18deg)
+    }
+    100% {
+      transform: rotate(-20deg)
+    }
+  }
 </style>
+
 <body>
+<div id="ufoLine">
+  <div id="ufo">
+    <img src="/ufo.svg" width="300px" />
+  </div>
+</div>
 </body>
-
-<script type="text/javascript">
-	var width = innerWidth;
-	var height = innerHeight;
-	var svg = d3.select("body").append("svg")
-				.attr("width",width)
-				.attr("height",height)
-				.append("g")
-				.attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
-
-	var WidthHeightRatio = 1024/361;
-	var UFO2ScreenRatio = 3;
-	var UFOHeight = 0.25; //0 - 1 the height ratio
-
-	var UFO = svg.append("image")
-				 .attr("xlink:href","UFO.png")
-				 .style("width",width/UFO2ScreenRatio)
-				 .attr("height",width/UFO2ScreenRatio/WidthHeightRatio)
-				 .attr("x",-width/UFO2ScreenRatio/2)
-				 .attr("y",-height/2 + (0.25)*height/2);
-
-</script>
-
-
-</html>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script src="//d3js.org/topojson.v1.min.js"></script>
+<script src="/alien_arrive.js"></script>
