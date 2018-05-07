@@ -42,8 +42,8 @@ svg.append("path")
 
 
 queue()
-  .defer(d3.json, "/world-50m.json")
-  .defer(d3.csv, "ufo-sightings/scrubbed.csv")
+  .defer(d3.json, "./world-50m.json")
+  .defer(d3.csv, "./ufo-sightings/scrubbed.csv")
   .await(callback);
 
 
