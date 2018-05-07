@@ -2,15 +2,15 @@
 /*this is drawing a us map in perspective*/
 
 var width = window.screen.width;
-height = 640;
+height = 820;
 
 var projection = d3.geo.orthographic()
     .scale(1500)
-    .translate([width / 2, height*2.7])
+    .translate([width / 2, height*2.3])
     .clipAngle(100)
     .precision(.5);
 
-projection.rotate([95, 23]);
+projection.rotate([97, 23]);
 
 //create the canvas
 var canvas = d3.select("#ufoLine").append("canvas")
@@ -21,6 +21,7 @@ var canvas = d3.select("#ufoLine").append("canvas")
 
 //create the context
 var context = canvas.node().getContext("2d");
+
 
 // create path generator
 var path = d3.geo.path()
@@ -48,7 +49,7 @@ function callback (error, world, ufoData) {
     var USA = countries.features.filter(function(d,i){if(d.id == 840) console.log(i);return d.id == 840;});
     var sphere = {type: "Sphere"};
 
-    context.clearRect(0, 0, width, height);
+    // context.clearRect(0, 0, width, height);
 
     // draw sphere
     context.beginPath();
@@ -78,7 +79,7 @@ function callback (error, world, ufoData) {
     context.strokeStyle = "rgb(131, 14, 14)";
     context.lineWidth = 1;
     context.stroke();
-    context.fillStyle = "url(\"#RadialGradient\")";
+    context.fillStyle = "black";
     context.fill();
 
   /*end map*/
@@ -98,7 +99,7 @@ function callback (error, world, ufoData) {
 
 
   var parentX = width/2;  // x y coordinates of the start points
-  var parentY = 0;
+  var parentY = 80;
 
   interestingPoints.forEach(function(d,i){
 
@@ -106,18 +107,27 @@ function callback (error, world, ufoData) {
     var tempX = interestingPoints[i][0];
     var tempY = interestingPoints[i][1];
     var differenceX = parentX - tempX;
-    var factor = 0.2; //control the curvature of the curve || larger the curvature will be larger
+    var factor = 0.4; //control the curvature of the curve || larger the curvature will be larger
     var controlX = (parentX + tempX) / 2 - differenceX * factor;
     var controlY = (parentY + tempY) / 2;
+    var gradient=context.createLinearGradient(0,0,0,600);
+    gradient.addColorStop("0","rgba(131, 14, 14, 0.006)");
+    // gradient.addColorStop("0.6","rgba(131, 14, 14, 0.1)");
+    // gradient.addColorStop("1.0","rgba(131, 14, 14 0.1)");
+    gradient.addColorStop("0.4","rgba(255, 153, 0, 0.06)");
+    gradient.addColorStop("1.0","rgba(255, 153, 0, 0.1)");
+   
 
     //draw the path
     context.beginPath();
     context.moveTo(parentX, parentY);
     context.quadraticCurveTo(controlX, controlY, tempX, tempY);
-    context.strokeStyle = "rgba(255, 153, 0, 0.1)";
+    context.strokeStyle = gradient;
     context.lineWidth = 0.08;
     context.stroke();
 
+ 
+    
     //draw the circle
     context.fillStyle = "rgba(255, 153, 0, 0.5)";
     context.beginPath();
