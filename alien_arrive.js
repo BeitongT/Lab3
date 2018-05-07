@@ -45,9 +45,7 @@ queue()
   .defer(d3.json, "/world-50m.json")
   .defer(d3.csv, "ufo-sightings/scrubbed.csv")
   .await(callback);
-<<<<<<< HEAD
 
-=======
 
 
 // call back function
@@ -195,7 +193,6 @@ function callback (error, world, ufoData) {
 }
 
   
->>>>>>> c18a3be12a500694cdaab8956ccaabe9711c1264
 
 // call back function
 function callback (error, world, ufoData) {
@@ -348,10 +345,7 @@ function callback (error, world, ufoData) {
 // function drawlines{
 // d3.csv()
 
-<<<<<<< HEAD
 // }
-=======
->>>>>>> c18a3be12a500694cdaab8956ccaabe9711c1264
 
 // var data = d3.range(11).map(function(){return Math.random()*10})
 //     var x = d3.scale.linear().domain([0, 10]).range([0, 1600]);
@@ -361,7 +355,6 @@ function callback (error, world, ufoData) {
 //       .x(function(d,i) {return x(i);})
 //       .y(function(d) {return y(d);})
 
-<<<<<<< HEAD
 // var path2 = svg.append("path")
 //        .attr("d", line(data))
 //       .attr("stroke", "white")
@@ -370,7 +363,6 @@ function callback (error, world, ufoData) {
       
 //       var totalLength = path2.node().getTotalLength();
 
-<<<<<<< HEAD
 // path2
 // .attr("stroke-dasharray", totalLength + " " + totalLength)
 // .attr("stroke-dashoffset", totalLength)
@@ -381,13 +373,5 @@ function callback (error, world, ufoData) {
 
 
 
-=======
->>>>>>> c18a3be12a500694cdaab8956ccaabe9711c1264
-
-=======
-
-
-
->>>>>>> c18a3be12a500694cdaab8956ccaabe9711c1264
 
   
