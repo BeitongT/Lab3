@@ -12,19 +12,22 @@ var projection = d3.geo.orthographic()
 
 projection.rotate([95, 23]);
 
+//create the canvas
 var canvas = d3.select("#ufoLine").append("canvas")
     .attr("x", 0)
     .attr("y", 0)
     .attr("width", width)
     .attr("height", height)
 
+//create the context
 var context = canvas.node().getContext("2d");
 
+// create path generator
 var path = d3.geo.path()
     .projection(projection)
     .context(context);
 
-
+// create graticule
 var graticule = d3.geo.graticule();
 
 
@@ -40,47 +43,48 @@ function callback (error, world, ufoData) {
   if (error) throw error;
 
   /*start map*/
-        var countries = topojson.feature(world, world.objects.countries);
-        var land = topojson.feature(world, world.objects.land);
-        var USA = countries.features.filter(function(d,i){if(d.id == 840) console.log(i);return d.id == 840;});
-        var sphere = {type: "Sphere"};
+    var countries = topojson.feature(world, world.objects.countries);
+    var land = topojson.feature(world, world.objects.land);
+    var USA = countries.features.filter(function(d,i){if(d.id == 840) console.log(i);return d.id == 840;});
+    var sphere = {type: "Sphere"};
 
-        context.clearRect(0, 0, width, height);
+    context.clearRect(0, 0, width, height);
 
-        context.beginPath();
-        path(sphere);
-        context.fillStyle = "rgb(10,10,10)";
-        context.fill();
+    // draw sphere
+    context.beginPath();
+    path(sphere);
+    context.fillStyle = "rgb(10,10,10)";
+    context.fill();
 
-        // Graticule
-        context.beginPath();
-        path(graticule());
-        context.strokeStyle = "rgba(131, 131, 131,0.5)";
-        context.lineWidth = 0.5;
-        context.stroke();
+    // Graticule
+    context.beginPath();
+    path(graticule());
+    context.strokeStyle = "rgba(131, 131, 131,0.5)";
+    context.lineWidth = 0.5;
+    context.stroke();
 
-        // Countries
-        context.beginPath();
-        path(countries);
-        context.strokeStyle = "rgba(46, 44, 44, 0.178";
-        context.lineWidth = 1;
-        context.stroke();
-        context.fillStyle = "rgba(255, 255, 255, 0.014)";
-        context.fill();
+    // Countries 
+    context.beginPath();
+    path(countries);
+    context.strokeStyle = "rgba(46, 44, 44, 0.178";
+    context.lineWidth = 1;
+    context.stroke();
+    context.fillStyle = "rgba(255, 255, 255, 0.014)";
+    context.fill();
 
-
-        context.beginPath();
-        path(USA[0]);
-        context.strokeStyle = "rgb(131, 14, 14)";
-        context.lineWidth = 1;
-        context.stroke();
-        context.fillStyle = "url(\"#RadialGradient\")";
-        context.fill();
+    //USA
+    context.beginPath();
+    path(USA[0]);
+    context.strokeStyle = "rgb(131, 14, 14)";
+    context.lineWidth = 1;
+    context.stroke();
+    context.fillStyle = "url(\"#RadialGradient\")";
+    context.fill();
 
   /*end map*/
 
 
-  /*start path  BeitongTian*/
+  /*start path*/
   var smallerData = ufoData.filter(function(d){
     return d.country == "us" && d.state != "hi";  //filter out other countries and Hawaii state 
   });
@@ -91,8 +95,6 @@ function callback (error, world, ufoData) {
     return tempResult;
    });
 
-
-  /*start canvas*/
 
 
   var parentX = width/2;  // x y coordinates of the start points
@@ -108,6 +110,7 @@ function callback (error, world, ufoData) {
     var controlX = (parentX + tempX) / 2 - differenceX * factor;
     var controlY = (parentY + tempY) / 2;
 
+    //draw the path
     context.beginPath();
     context.moveTo(parentX, parentY);
     context.quadraticCurveTo(controlX, controlY, tempX, tempY);
@@ -115,8 +118,7 @@ function callback (error, world, ufoData) {
     context.lineWidth = 0.08;
     context.stroke();
 
-
-
+    //draw the circle
     context.fillStyle = "rgba(255, 153, 0, 0.5)";
     context.beginPath();
     context.arc(tempX,tempY,1.2,0,Math.PI * 2,true);
