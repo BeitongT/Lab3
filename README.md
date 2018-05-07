@@ -1,9 +1,10 @@
 # Lab3
 
 <h1>Notice the D3 version is V3</h1>
-<form>
-<input type="button" value="Click to view the lastest version" onclick="window.location.href='https://beitongt.github.io/Lab3/'" />
-</form>
+<hr>
+<a href='https://beitongt.github.io/Lab3/'> Click to view the lastest version</a>
+<br>
+<hr>
 <img src="/result/2018-05-03.png">
 <p>Add the UFO image. Feature: refresh the page and resize according to the window width. </p>
 
