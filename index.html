@@ -22,10 +22,9 @@
     stroke-opacity: .5;
   }
 
-
   .country {
     fill: rgba(255, 255, 255, 0.014);
-    stroke: rgba(255, 255, 255, 0.11);
+    stroke: rgba(46, 44, 44, 0.178);
     stroke-width: 1px;
   }
 
@@ -34,14 +33,16 @@
     stroke: rgb(131, 14, 14);
     stroke-width: 1px;
   }
+
   #ufoLine{
+    margin: auto;
     height: 800px;
   }
 
   #ufo {
+    display: block;
     margin: auto;
     width: 300px;
-    height: 200px;
     filter: drop-shadow( -5px -5px 5px rgb(131, 14, 14));
     transform: rotate(-20deg);
     -webkit-animation: ufo 5s linear 2s infinite alternate;
@@ -92,9 +93,7 @@
 
 <body>
 <div id="ufoLine">
-  <div id="ufo">
-    <img src="/ufo.svg" width="300px" />
-  </div>
+<img id="ufo" src="/ufo.svg"/>
 </div>
 </body>
 <script src="//d3js.org/d3.v3.min.js"></script>
