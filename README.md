@@ -1,4 +1,7 @@
 # Lab3
+
+<h1>Notice the D3 version is V3</h1>
+<button src="https://beitongt.github.io/Lab3/">Click to view the latest version</button>
 <img src="/result/2018-05-03.png">
 <p>Add the UFO image. Feature: refresh the page and resize according to the window width. </p>
 
