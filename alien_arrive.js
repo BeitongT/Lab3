@@ -140,6 +140,16 @@ function callback (error, world, ufoData) {
             context.beginPath();
             context.arc(childX,childY,1.2,0,Math.PI * 2,true);
             context.fill();
+
+            context.moveTo( parentX, parentY );
+            context.quadraticCurveTo( controlX, controlY, childX, childY );
+            var gradient=context.createLinearGradient(0,0,0,600);
+                gradient.addColorStop("0","rgba(131, 14, 14, 0.012)");
+                gradient.addColorStop("0.4","rgba(255, 153, 0, 0.12)");
+                gradient.addColorStop("1.0","rgba(255, 153, 0, 0.2)");
+                context.strokeStyle = gradient;
+                context.lineWidth = 0.1;
+                context.stroke();
         }
     };
     
