@@ -2,15 +2,15 @@
 /*this is drawing a us map in perspective*/
 
 var width = window.screen.width;
-height = 820;
+    height = 820;
 
 var projection = d3.geo.orthographic()
-    .scale(1500)
-    .translate([width / 2, height*2.3])
-    .clipAngle(100)
-    .precision(.5);
+                    .scale(1500)
+                    .translate([width / 2, height*2.3])
+                    .clipAngle(100)
+                    .precision(.5);
 
-projection.rotate([97, 23]);
+    projection.rotate([97, 23]); //rotate the sphere
 
 //create the canvas
 var canvas = d3.select("#ufoLine").append("canvas")
@@ -21,7 +21,6 @@ var canvas = d3.select("#ufoLine").append("canvas")
 
 //create the context
 var context = canvas.node().getContext("2d");
-
 
 // create path generator
 var path = d3.geo.path()
@@ -38,7 +37,6 @@ queue()
   .await(callback);
 
 
-
 // call back function
 function callback (error, world, ufoData) {
   if (error) throw error;
@@ -49,7 +47,8 @@ function callback (error, world, ufoData) {
     var USA = countries.features.filter(function(d,i){if(d.id == 840) console.log(i);return d.id == 840;});
     var sphere = {type: "Sphere"};
 
-    // context.clearRect(0, 0, width, height);
+    //clean the canvas
+    context.clearRect(0, 0, width, height);
 
     // draw sphere
     context.beginPath();
@@ -86,32 +85,42 @@ function callback (error, world, ufoData) {
 
 
   /*start path*/
+
+  //filter out other countries and Hawaii state 
   var smallerData = ufoData.filter(function(d){
-    return d.country == "us" && d.state != "hi";  //filter out other countries and Hawaii state 
+    return d.country == "us" && d.state != "hi";  
   });
 
+  //get the data length to stop the timer 
+  var dataLength = smallerData.length;  
 
-  var dataLength = smallerData.length;  //get the data length to stop the timer 
-
-  var interestingPoints = smallerData.map(function(d){  //create array of x and y coordinates on the transformed MAP
+  //create array of x and y coordinates on the transformed MAP
+  var interestingPoints = smallerData.map(function(d){  
     var tempArray = [+d.longitude,+d.latitude];
     var tempResult = projection(tempArray);
     return tempResult;
    });
 
 
+/*animation
+    A: Some lines slowly appear
+    B: Lines appear very fast
+*/
 
-  var counter = 0;
+  var counter = 0;  //global variable to count the line 
   var factor = 0.4; //control the curvature of the curve || larger the curvature will be larger
+  var speed = 10;  // the whole animation speed || recommend 300
+  var speedStep = 2;  // the whole animation speed || recommend 300
+  var numberA = 5; //how many lines will process the start animation
+  var durationA = 1000; //line animation A time
+  var durationB = 200; //line animation B time
+  var parentX = width / 2;  //startPointX
+  var parentY = 80;         //startPointY
 
-  var timerFunction = function () {  // this function will process after the previous line finish  
+  var timerFunction = function () {  
 
-    var lineWidth = 3 / (counter + 1);
-    var duration = 1000;
-
+    var lineWidth = 3 / (counter + 1);  //line width function for the animation stage A
     //points information
-    var parentX = width / 2;
-    var parentY = 80;
     var childX = interestingPoints[counter][0];
     var childY = interestingPoints[counter][1];
     var differenceX = parentX - childX;
@@ -124,29 +133,30 @@ function callback (error, world, ufoData) {
         if (start === null)
             start = timestamp;
         var delta = timestamp - start;
-        var progress = Math.min(delta / duration, 1); //the progress of the line animation
+        var progress = Math.min(delta / durationA, 1); //the progress of the line animation
 
         // Draw curve
         drawBezierSplit(context, parentX, parentY, controlX, controlY, childX, childY, 0, progress,lineWidth);
         
-
-        if (progress < 1) { //redo the drawing
-            window.requestAnimationFrame(step);
+        //in the drawing
+        if (progress < 1) { 
+            window.requestAnimationFrame(step); //actually this is a loop
         }
+
+        //do something in the last step of drawing 
         if(progress >= 1) {     
+
             //draw the circle
             context.fillStyle = "rgba(255, 153, 0, 0.5)";
             context.beginPath();
             context.arc(childX,childY,1.2,0,Math.PI * 2,true);
             context.fill();
 
-            //which means the line is finished. For the color effect, we need to draw it again;
-            context.moveTo( parentX, parentY );
+            //redraw the line to make a right color scheme
+            context.moveTo(parentX, parentY);
             context.quadraticCurveTo( controlX, controlY, childX, childY );
             var gradient=context.createLinearGradient(0,0,0,600);
                 gradient.addColorStop("0","rgba(131, 14, 14, 0.005)");
-                // gradient.addColorStop("0.6","rgba(131, 14, 14, 0.1)");
-                // gradient.addColorStop("1.0","rgba(131, 14, 14 0.1)");
                 gradient.addColorStop("0.4","rgba(255, 153, 0, 0.06)");
                 gradient.addColorStop("1.0","rgba(255, 153, 0, 0.1)");
                 context.strokeStyle = gradient;
@@ -154,35 +164,25 @@ function callback (error, world, ufoData) {
                 context.stroke();
         }
     };
-    
 
+    // finish drawing 
     window.requestAnimationFrame(step);
+
     counter++;
 
-
-    if(counter > 5) {
-        timer.restart(timerFunction3,500);
+    if(counter > numberA) {     //if the we have finish the animation stageA we will move to stage B
+        timer.restart(timerFunction3,durationB);
     }
 
 }
 
   var timerFunction2 = function () {  // this function will process after the previous line finish  
 
-    if(counter >= dataLength) {     //if finish all the lines. stop the timer
-        console.log("end");
-        console.log(d3.now());
-        timer.stop();
-    }
 
     // line parameters
-    var lineWidth = Math.max(3 / (counter + 1),0.1);
-    var duration = 500;
-
-
+    var lineWidth = Math.max(3 / (counter + 1),0.1);   //line width function for the animation stage B
 
     //points information
-    var parentX = width / 2;
-    var parentY = 80;
     var childX = interestingPoints[counter][0];
     var childY = interestingPoints[counter][1];
     var differenceX = parentX - childX;
@@ -195,7 +195,7 @@ function callback (error, world, ufoData) {
         if (start === null)
             start = timestamp;
         var delta = timestamp - start;
-        var progress = Math.min(delta / duration, 1); //the progress of the line animation
+        var progress = Math.min(delta / durationB, 1); //the progress of the line animation
 
         // Draw curve
         drawBezierSplit(context, parentX, parentY, controlX, controlY, childX, childY, 0, progress,lineWidth);
@@ -216,8 +216,6 @@ function callback (error, world, ufoData) {
             context.quadraticCurveTo( controlX, controlY, childX, childY );
             var gradient=context.createLinearGradient(0,0,0,600);
                 gradient.addColorStop("0","rgba(131, 14, 14, 0.005)");
-                // gradient.addColorStop("0.6","rgba(131, 14, 14, 0.1)");
-                // gradient.addColorStop("1.0","rgba(131, 14, 14 0.1)");
                 gradient.addColorStop("0.4","rgba(255, 153, 0, 0.06)");
                 gradient.addColorStop("1.0","rgba(255, 153, 0, 0.1)");
                 context.strokeStyle = gradient;
@@ -226,28 +224,42 @@ function callback (error, world, ufoData) {
         }
     };
     
-
     window.requestAnimationFrame(step);
+
     counter++;
     
 }
 
-var speed  = 500;
-
 var timerFunction3 = function () { 
-    for(var i = 0; i< speed; i++) {
-    timerFunction2();
-  }
+    if((dataLength - counter) > speed) {
+        for(var i = 0; i< speed; i++) {
+        timerFunction2();
+        }
+        speed = speed + speedStep;
+    }
+    else {
+        for(var i = 0; i< dataLength - counter; i++) {
+        timerFunction2();
+        }
+        //when all the lines are plotted stop the timer
+        var timeEnd = d3.now()
+        console.log("end");
+        console.log(timeEnd);
+
+        var timeUsed = d3.now() - timeStart;
+        console.log("time used");
+        console.log(timeUsed/1000 + " s");
+        timer.stop();
+
+    }
+
 }
 
-
-
-
-
-
   console.log("start"); //calculate the time
-  console.log(d3.now());
-  var timer = d3.interval(timerFunction,1000); // time function
+  var timeStart = d3.now();
+  console.log(timeStart);
+
+  var timer = d3.interval(timerFunction,durationA); // time function
 
 
 
