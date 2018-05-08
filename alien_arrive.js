@@ -86,7 +86,7 @@ function callback (error, world, ufoData) {
 
 
   /*start path*/
-  var smallerData = ufoData.slice(0,10000).filter(function(d){
+  var smallerData = ufoData.filter(function(d){
     return d.country == "us" && d.state != "hi";  //filter out other countries and Hawaii state 
   });
 
@@ -101,14 +101,13 @@ function callback (error, world, ufoData) {
 
 
 
-
   var counter = 0;
   var factor = 0.4; //control the curvature of the curve || larger the curvature will be larger
-  var duration = 20;  // each line animation time
 
+  var timerFunction = function () {  // this function will process after the previous line finish  
 
-
-  var timer = d3.interval(function () {  // this function will process after the previous line finish  
+    var lineWidth = 3 / (counter + 1);
+    var duration = 1000;
 
     //points information
     var parentX = width / 2;
@@ -128,27 +127,30 @@ function callback (error, world, ufoData) {
         var progress = Math.min(delta / duration, 1); //the progress of the line animation
 
         // Draw curve
-        drawBezierSplit(context, parentX, parentY, controlX, controlY, childX, childY, 0, progress);
+        drawBezierSplit(context, parentX, parentY, controlX, controlY, childX, childY, 0, progress,lineWidth);
         
 
-        if (progress < 1) {
+        if (progress < 1) { //redo the drawing
             window.requestAnimationFrame(step);
         }
-        if(progress == 1) {
+        if(progress >= 1) {     
             //draw the circle
             context.fillStyle = "rgba(255, 153, 0, 0.5)";
             context.beginPath();
             context.arc(childX,childY,1.2,0,Math.PI * 2,true);
             context.fill();
 
+            //which means the line is finished. For the color effect, we need to draw it again;
             context.moveTo( parentX, parentY );
             context.quadraticCurveTo( controlX, controlY, childX, childY );
             var gradient=context.createLinearGradient(0,0,0,600);
-                gradient.addColorStop("0","rgba(131, 14, 14, 0.012)");
-                gradient.addColorStop("0.4","rgba(255, 153, 0, 0.12)");
-                gradient.addColorStop("1.0","rgba(255, 153, 0, 0.2)");
+                gradient.addColorStop("0","rgba(131, 14, 14, 0.005)");
+                // gradient.addColorStop("0.6","rgba(131, 14, 14, 0.1)");
+                // gradient.addColorStop("1.0","rgba(131, 14, 14 0.1)");
+                gradient.addColorStop("0.4","rgba(255, 153, 0, 0.06)");
+                gradient.addColorStop("1.0","rgba(255, 153, 0, 0.1)");
                 context.strokeStyle = gradient;
-                context.lineWidth = 0.1;
+                context.lineWidth = lineWidth;
                 context.stroke();
         }
     };
@@ -157,16 +159,102 @@ function callback (error, world, ufoData) {
     window.requestAnimationFrame(step);
     counter++;
 
-    //if finish all the lines. stop the timer
-    if(counter >= dataLength) timer.stop();
+
+    if(counter > 5) {
+        timer.restart(timerFunction3,500);
+    }
+
+}
+
+  var timerFunction2 = function () {  // this function will process after the previous line finish  
+
+    if(counter >= dataLength) {     //if finish all the lines. stop the timer
+        console.log("end");
+        console.log(d3.now());
+        timer.stop();
+    }
+
+    // line parameters
+    var lineWidth = Math.max(3 / (counter + 1),0.1);
+    var duration = 500;
 
 
-},duration);
+
+    //points information
+    var parentX = width / 2;
+    var parentY = 80;
+    var childX = interestingPoints[counter][0];
+    var childY = interestingPoints[counter][1];
+    var differenceX = parentX - childX;
+    var controlX = (parentX + childX) / 2 - differenceX * factor;
+    var controlY = (parentY + childY) / 2;
+
+    var start = null;
+    
+    var step = function animatePathDrawingStep(timestamp) {
+        if (start === null)
+            start = timestamp;
+        var delta = timestamp - start;
+        var progress = Math.min(delta / duration, 1); //the progress of the line animation
+
+        // Draw curve
+        drawBezierSplit(context, parentX, parentY, controlX, controlY, childX, childY, 0, progress,lineWidth);
+        
+
+        if (progress < 1) { //redo the drawing
+            window.requestAnimationFrame(step);
+        }
+        if(progress >= 1) {     
+            //draw the circle
+            context.fillStyle = "rgba(255, 153, 0, 0.5)";
+            context.beginPath();
+            context.arc(childX,childY,1.2,0,Math.PI * 2,true);
+            context.fill();
+
+            //which means the line is finished. For the color effect, we need to draw it again;
+            context.moveTo( parentX, parentY );
+            context.quadraticCurveTo( controlX, controlY, childX, childY );
+            var gradient=context.createLinearGradient(0,0,0,600);
+                gradient.addColorStop("0","rgba(131, 14, 14, 0.005)");
+                // gradient.addColorStop("0.6","rgba(131, 14, 14, 0.1)");
+                // gradient.addColorStop("1.0","rgba(131, 14, 14 0.1)");
+                gradient.addColorStop("0.4","rgba(255, 153, 0, 0.06)");
+                gradient.addColorStop("1.0","rgba(255, 153, 0, 0.1)");
+                context.strokeStyle = gradient;
+                context.lineWidth = lineWidth;
+                context.stroke();
+        }
+    };
+    
+
+    window.requestAnimationFrame(step);
+    counter++;
+    
+}
+
+var speed  = 500;
+
+var timerFunction3 = function () { 
+    for(var i = 0; i< speed; i++) {
+    timerFunction2();
+  }
+}
+
+
+
+
+
+
+  console.log("start"); //calculate the time
+  console.log(d3.now());
+  var timer = d3.interval(timerFunction,1000); // time function
+
+
 
 
 //function for the line animation
  
- function drawBezierSplit(ctx, x0, y0, x1, y1, x2, y2, t0, t1) {
+ function drawBezierSplit(ctx, x0, y0, x1, y1, x2, y2, t0, t1,lineWidth) {
     ctx.beginPath();
     
     if( 0.0 == t0 && t1 == 1.0 ) {
@@ -199,13 +287,13 @@ function callback (error, world, ufoData) {
 
     // context.strokeStyle = "rgb(131, 144, 14)";
     var gradient=context.createLinearGradient(0,0,0,600);
-    gradient.addColorStop("0","rgba(131, 14, 14, 0.012)");
+    gradient.addColorStop("0","rgba(131, 14, 14, 0.005)");
     // gradient.addColorStop("0.6","rgba(131, 14, 14, 0.1)");
     // gradient.addColorStop("1.0","rgba(131, 14, 14 0.1)");
-    gradient.addColorStop("0.4","rgba(255, 153, 0, 0.12)");
-    gradient.addColorStop("1.0","rgba(255, 153, 0, 0.2)");
+    gradient.addColorStop("0.4","rgba(255, 153, 0, 0.06)");
+    gradient.addColorStop("1.0","rgba(255, 153, 0, 0.1)");
     context.strokeStyle = gradient;
-    context.lineWidth = 0.1;
+    context.lineWidth = lineWidth;
     ctx.stroke();
     ctx.closePath();
 }
