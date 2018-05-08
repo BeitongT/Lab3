@@ -86,9 +86,12 @@ function callback (error, world, ufoData) {
 
 
   /*start path*/
-  var smallerData = ufoData.filter(function(d){
+  var smallerData = ufoData.slice(0,10000).filter(function(d){
     return d.country == "us" && d.state != "hi";  //filter out other countries and Hawaii state 
   });
+
+
+  var dataLength = smallerData.length;  //get the data length to stop the timer 
 
   var interestingPoints = smallerData.map(function(d){  //create array of x and y coordinates on the transformed MAP
     var tempArray = [+d.longitude,+d.latitude];
@@ -98,48 +101,112 @@ function callback (error, world, ufoData) {
 
 
 
-  var parentX = width/2;  // x y coordinates of the start points
-  var parentY = 80;
 
-  interestingPoints.forEach(function(d,i){
+  var counter = 0;
+  var factor = 0.4; //control the curvature of the curve || larger the curvature will be larger
+  var duration = 20;  // each line animation time
 
 
-    var tempX = interestingPoints[i][0];
-    var tempY = interestingPoints[i][1];
-    var differenceX = parentX - tempX;
-    var factor = 0.4; //control the curvature of the curve || larger the curvature will be larger
-    var controlX = (parentX + tempX) / 2 - differenceX * factor;
-    var controlY = (parentY + tempY) / 2;
+
+  var timer = d3.interval(function () {  // this function will process after the previous line finish  
+
+    //points information
+    var parentX = width / 2;
+    var parentY = 80;
+    var childX = interestingPoints[counter][0];
+    var childY = interestingPoints[counter][1];
+    var differenceX = parentX - childX;
+    var controlX = (parentX + childX) / 2 - differenceX * factor;
+    var controlY = (parentY + childY) / 2;
+
+    var start = null;
+    
+    var step = function animatePathDrawingStep(timestamp) {
+        if (start === null)
+            start = timestamp;
+        var delta = timestamp - start;
+        var progress = Math.min(delta / duration, 1); //the progress of the line animation
+
+        // Draw curve
+        drawBezierSplit(context, parentX, parentY, controlX, controlY, childX, childY, 0, progress);
+        
+
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        }
+        if(progress == 1) {
+            //draw the circle
+            context.fillStyle = "rgba(255, 153, 0, 0.5)";
+            context.beginPath();
+            context.arc(childX,childY,1.2,0,Math.PI * 2,true);
+            context.fill();
+        }
+    };
+    
+
+    window.requestAnimationFrame(step);
+    counter++;
+
+    //if finish all the lines. stop the timer
+    if(counter >= dataLength) timer.stop();
+
+
+},duration);
+
+
+//function for the line animation
+ 
+ function drawBezierSplit(ctx, x0, y0, x1, y1, x2, y2, t0, t1) {
+    ctx.beginPath();
+    
+    if( 0.0 == t0 && t1 == 1.0 ) {
+        ctx.moveTo( x0, y0 );
+        ctx.quadraticCurveTo( x1, y1, x2, y2 );
+    } else if( t0 != t1 ) {
+        var t00 = t0 * t0,
+            t01 = 1.0 - t0,
+            t02 = t01 * t01,
+            t03 = 2.0 * t0 * t01;
+        
+        var nx0 = t02 * x0 + t03 * x1 + t00 * x2,
+            ny0 = t02 * y0 + t03 * y1 + t00 * y2;
+        
+        t00 = t1 * t1;
+        t01 = 1.0 - t1;
+        t02 = t01 * t01;
+        t03 = 2.0 * t1 * t01;
+        
+        var nx2 = t02 * x0 + t03 * x1 + t00 * x2,
+            ny2 = t02 * y0 + t03 * y1 + t00 * y2;
+        
+        var nx1 = lerp ( lerp ( x0 , x1 , t0 ) , lerp ( x1 , x2 , t0 ) , t1 ),
+            ny1 = lerp ( lerp ( y0 , y1 , t0 ) , lerp ( y1 , y2 , t0 ) , t1 );
+        
+        ctx.moveTo( nx0, ny0 );
+        ctx.quadraticCurveTo( nx1, ny1, nx2, ny2 );
+    }
+
+
+    // context.strokeStyle = "rgb(131, 144, 14)";
     var gradient=context.createLinearGradient(0,0,0,600);
-    gradient.addColorStop("0","rgba(131, 14, 14, 0.006)");
+    gradient.addColorStop("0","rgba(131, 14, 14, 0.012)");
     // gradient.addColorStop("0.6","rgba(131, 14, 14, 0.1)");
     // gradient.addColorStop("1.0","rgba(131, 14, 14 0.1)");
-    gradient.addColorStop("0.4","rgba(255, 153, 0, 0.06)");
-    gradient.addColorStop("1.0","rgba(255, 153, 0, 0.1)");
-   
-
-    //draw the path
-    context.beginPath();
-    context.moveTo(parentX, parentY);
-    context.quadraticCurveTo(controlX, controlY, tempX, tempY);
+    gradient.addColorStop("0.4","rgba(255, 153, 0, 0.12)");
+    gradient.addColorStop("1.0","rgba(255, 153, 0, 0.2)");
     context.strokeStyle = gradient;
-    context.lineWidth = 0.08;
-    context.stroke();
+    context.lineWidth = 0.1;
+    ctx.stroke();
+    ctx.closePath();
+}
 
+/**
+ * Linearly interpolate between two numbers v0, v1 by t
+ */
  
-    
-    //draw the circle
-    context.fillStyle = "rgba(255, 153, 0, 0.5)";
-    context.beginPath();
-    context.arc(tempX,tempY,1.2,0,Math.PI * 2,true);
-    context.fill();
-  });
-
-
-  /*end canvas*/
-
-
-
+function lerp(v0, v1, t) {
+    return ( 1.0 - t ) * v0 + t * v1;
+}
 
 }
 

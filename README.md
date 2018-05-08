@@ -15,3 +15,4 @@
 <br>
 <img src="/result/2018-05-07.png">
 <p>Change from svg to canvas</p>
+<p>Add animation to canvas</p>
