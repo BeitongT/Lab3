@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="https://unpkg.com/topojson-client@3"></script>
+
+<style type="text/css">
+  body {
+    background: #000000;
+  }
+/* On mouse hover, lighten state color */
+path:hover {
+	fill-opacity: .7;
+}
+
+.canvas-wrapper {
+        position: relative;
+        width: 1200px;
+        height: 1000px;
+        /*border: 1px solid black;*/
+      }
+.main {
+        position: absolute;
+      }
+#tooltip {
+			position: absolute;        
+			display: inline-block;
+			padding: 10px;
+			font-family: 'Open Sans' sans-serif;
+			color: #000;
+			background-color: #fff;
+			border: 1px solid #999;
+			border-radius: 2px;
+		    pointer-events: none;
+			opacity: 0;
+			z-index: 1;
+		}
+
+#content {
+  margin: 5px;
+  padding: 20px;
+  width: 1000px;
+  /*border: 1px solid #ccc;*/
+}
+
+#map {
+  margin: 10px 0px 0px 0px;
+  padding: 0px;
+}
+
+h1, h2 {
+  line-height: 1em;
+  font-size: 1.75em;
+  font-weight: 900;
+  color: #fff;
+}
+
+h2.year, h2.count {
+  margin: 5px 0px 0px 0px;
+  font-size: 1.3em;
+  font-weight: 700;
+}
+
+p {
+  margin: 10px 0px 0px 0px;
+}
+
+input {
+  display: block;
+  width: 200px;
+  margin: 10px 0px 0px 0px;
+}
+
+.states {
+  fill: #f5eede;
+  stroke: #fff;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.openings {
+  fill: #f5eede;
+  stroke: #8D0600;
+  stroke-width: 2;
+}
+
+.openings:hover {
+  fill: #8D0600;
+}
+
+.locations{
+  fill: #f5eede;
+  stroke: #C0392B;
+  stroke-width: 1;
+  opacity: 0.7;
+}
+
+.tooltip {
+  position: absolute;
+  padding: 7px;
+  font-size: 0.9em;
+  pointer-events: none;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+
+  -moz-box-shadow:    3px 3px 10px 0px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.25);
+  box-shadow:         3px 3px 10px 0px rgba(0, 0, 0, 0.25);
+}
+
+.tooltip p {
+  margin: 0;
+  padding: 0;
+}
+
+
+/* Legend Font Style */
+body {
+	font: 11px sans-serif;
+}
+        
+
+</style>
+</head>
+<body>
+
+<body>
+<div id="content">
+	<h1>UFO in the U.S, 1949-2013</h1>
+	<h2 class="year"></h2>
+	<h2 class="count"></h2>
+	<input id="menu" type="range" min="1949" max="2013" step="1" value ="1949"/>
+	<div id="map"></div>
+	<!-- <script type="text/javascript" src="map.js"></script> -->
+</div>
+<div id="tooltip"></div>
+
+  <div class="canvas-wrapper">
+      
+      <canvas id = "canvas1" class="main" width = "1000" height = "800"></canvas>
+      <canvas id = "canvas2" class="main"  width = "1000" height = "800"></canvas>
+  </div>
+
+
+<!-- var canvas2 = d3.select("body").append("canvas")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", width)
+    .attr("height", height)
+    .attr("id","canvas2")
+    .attr("class","main"); -->
+
+<script type="text/javascript">
+
+		
+//Width and height of map
+var width = 1000;
+var height = 800;
+
+console.log(width);
+console.log(height);
+
+
+//the circle radius we will draw
+var circleRadius = Math.min(width,height)/600;
+var ScircleRadius = Math.min(width,height)/100;
+console.log(circleRadius);
+
+// D3 Projection define the size of the map
+var projection = d3.geo.albersUsa()
+				   .translate([width/2, height/2])    // translate to center of screen
+				   .scale(Math.min(width,height) * 1500 / 1100);    // scale things down so see entire US
+        
+// create canvas (like create the sketch book)
+// var canvas = d3.select("body").append("canvas")
+//     .attr("x", 0)
+//     .attr("y", 0)
+//     .attr("width", width)
+//     .attr("height", height)
+//     .attr("class","main");
+
+//create the context (like create the pen and eraser)
+var c1 = document.getElementById("canvas1");
+var context =c1.getContext("2d");
+
+// Define path generator (like create the idea to paint(how we draw))
+var path = d3.geo.path()               
+		  	 .projection(projection)  // tell path generator to use albersUsa projection
+		  	 .context(context);
+
+
+var c = document.getElementById("canvas2");
+var context2 =c.getContext("2d");
+
+// Define path generator (like create the idea to paint(how we draw))
+var path2 = d3.geo.path()               
+		  	 .projection(projection)  // tell path generator to use albersUsa projection
+		  	 .context(context2);
+     
+// Load GeoJSON data and merge with states data
+d3.json("./us-states.json", function(us) {
+
+	//draw states ( draw it)
+	context.beginPath();	// begin to draw
+	path(us);				// what is the path
+	context.strokeStyle = "orange";		//set color
+	context.lineWidth = 1;			// set width
+	context.stroke();				//draw on the canvas
+
+
+
+d3.csv("scrubbed.csv", function(data) {
+	// console.log(data);
+
+
+	//filter the data
+	var datanew = data.filter(function(d){
+		if(d.country == "us" && d.state != "pr") return 1;
+		else return 0;
+	});
+
+	//apply projection on the data
+	var dataprojection = datanew.map(function(d){
+		var newdata;
+		var tempPosition = projection([+d.longitude,+d.latitude]);
+		var tempcity = d.city;
+		newdata = {position:tempPosition,city:tempcity};
+		return newdata;
+	});
+
+	//draw the circle for each point
+
+	dataprojection.forEach(function(d){
+		var childX = d.position[0];
+	    var childY = d.position[1];
+
+	    context.beginPath();	//begin to draw	
+	    context.arc(childX,childY,circleRadius,0,Math.PI * 2,true);	//how to draw a circle (xposition,yposition, radius, start angle, finish angle.. like draw an arc)
+	   	context.fillStyle = "rgba(255, 153, 0, 0.5)";	//set color
+	    context.fill();	//lets draw it 
+	})
+
+	//read from the slider
+	function drawOpenings() {
+	context2.clearRect(0,0,width,height);
+	// d3.selectAll(".openings")
+	// .remove();
+
+	var selectedYear = document.getElementById("menu").value;
+	var filteredData = datanew.filter(function(d) {return d.year == selectedYear; });
+	// console.log(typeof d.datetime);
+	// console.log(filteredData);
+
+	//apply projection on the data
+	var Selecteddataprojection = filteredData.map(function(d){
+		var selectnewdata;
+		var selectedtempPosition = projection([+d.longitude,+d.latitude]);
+		var selectedtempcity = d.city;
+		selectnewdata = {position:selectedtempPosition,city:selectedtempcity};
+		return selectnewdata;
+	});
+
+	console.log(Selecteddataprojection);
+
+	//draw the circle for each point
+
+	Selecteddataprojection.forEach(function(d){
+		var SchildX = d.position[0];
+	    var SchildY = d.position[1];
+
+	    context2.beginPath();	//begin to draw	
+	    context2.arc(SchildX,SchildY,ScircleRadius,0,Math.PI * 2,true);	//how to draw a circle (xposition,yposition, radius, start angle, finish angle.. like draw an arc)
+	   	context2.fillStyle = "rgba(255, 0, 0, 0.5)";	//set color
+	    context2.fill();	//lets draw it 
+	})
+
+		//tool tip
+	d3.select(".main").on('mousemove',function(){
+		// console.log('move');
+		var mouseX = d3.event.layerX || d3.event.offsetX;	// get the mouse x cooridinate
+		var mouseY = d3.event.layerY || d3.event.offsety;	// get the mouse y cooridinate
+		var thispoint = Selecteddataprojection.filter(function(d){
+			// check if the mouse is near some points?
+			if(d.position[0] >= mouseX-ScircleRadius && d.position[0] <= mouseX+ScircleRadius && d.position[1] >= mouseY - circleRadius && d.position[1] <= mouseY + ScircleRadius)	return 1;
+			else return 0;
+		});
+
+		// if the mouse points to some points we will draw a tooltip
+		if(thispoint.length>0) {
+			d3.select('#tooltip')
+			  .style('opacity', 0.8)
+			  .style('top', d3.event.pageY + 5 + 'px')
+			  .style('left', d3.event.pageX + 5 + 'px')
+			  .html('city: ' + thispoint[0].city);
+		}
+		//if the mouse points nothing, we will make the tooltip disappear
+		else {
+			d3.select('#tooltip')
+			  .style('opacity', 0);
+		}
+
+	});
+
+
+
+
+
+	// var openings = canvas.selectAll(".openings")
+	// 	.data(filteredData)
+	// 	.enter()
+	// 	.append("circle")
+	// 		.attr("cx", function(d) {
+	// 		return projection([d.longitude, d.latitude])[0];
+	// 		})
+	// 		.attr("cy", function(d) {
+	// 		return projection([d.longitude, d.latitude])[1];
+	// 		})
+	// 		.attr("r", 3);
+
+
+	d3.select(".year").text("Year: " + selectedYear);
+
+	// var countByYear=d3.nest()
+	// 	.key(function(d) {return d.openyear;})
+	// 	.rollup(function(values) { return values.length; })
+	// 	.entries(filteredData);
+
+	// d3.select(".count")
+	// .text(function(d,i) {
+ //        return "New Stores: " + countByYear[i].values
+ //      });
+
+};
+
+d3.select("#menu")
+	.on("input", function () {
+		drawOpenings();
+});
+
+
+});  // end for scrubbed.csv
+});	// end for us-states.json
+
+
+
+</script>
+</body>
+</html>
