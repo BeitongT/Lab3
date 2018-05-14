@@ -25,3 +25,9 @@
 
 <p>Change the code according to the comments</p>
 
+part2:  updated data in scrubbed
+
+Part2 TODO: 
+	1.tooltip
+	2. hover every state
+	3. info box 
