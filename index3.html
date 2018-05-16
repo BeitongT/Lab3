@@ -6,19 +6,30 @@
 <script src="https://d3js.org/queue.v1.min.js"></script>
 <script src="https://d3js.org/topojson.v1.min.js"></script>
 <script src="https://d3js.org/d3-timer.v1.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Comfortaa|Poiret+One" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
 <style>
 body{
   background-color: black;
 }
 .orbit {
-  stroke : #000000;
-  fill : none;
+  stroke : #6e0400;
+  stroke-width:4px;
+  fill : black;
 }
+
 .planet {
   stroke : #000000;
   fill : #FFFFFF;
 }
-
+.svg2{
+  stroke:#FFFFFF;
+  stroke-width: 1px;
+}
+#box{
+  float:left;
+}
 /* .sun {
   stroke : #BBCE32;
   stroke-width:1px;
@@ -27,8 +38,11 @@ body{
 
 </style>
 <body>
+
 <div id="shape"></div>
-<!-- <svg width="1000" height="1000" id="i1"></svg></div> -->
+
+<!-- <div id="word">
+<svg width="1000" height="1000" id="i1"></svg></div> -->
 
 <script>
   var counts = {};
@@ -55,7 +69,7 @@ console.log(counts)
 </script>
 <script>
 
-var w = 1200, h = 1000;
+var w = 1600, h = 1000;
 var t0 = Date.now();
 
 var planets = [
@@ -64,23 +78,41 @@ var planets = [
   { R: 400, width: 90, speed: 2, phi0: 20}
 ];
 
-
 var svg = d3.select("#shape").insert("svg")
   .attr("width", w).attr("height", h);
 
+
+svg.append("text").attr("x",1100).attr("y",250).text("Total UFO Shapes").style("fill", "#891010")
+.attr("font-size",50).attr("font-family","VT323");
+
+
+svg.append("text").attr("x",1100).attr("y",380).text("25").style("fill","#f69102")
+.attr("font-size",120).attr("font-family","VT323");
+
+svg.append("text").attr("x",1100).attr("y",450).text("Top: light appeared 16565 times").style("fill", "#891010")
+.attr("font-size",30).attr("font-family","VT323");
+
+
 var container = svg.append("g")
-  .attr("transform", "translate(" + w/2 + "," + h/2 + ")")
-  // svg.append("circle").attr("r", 100).attr("cx", w/2)
-  //   .attr("cy", h/2).attr("class", "sun")
+  .attr("transform", "translate(" + 550 + "," + 500 + ")");
+
+
+
+
+container.append("defs")
+  .append("filter").attr("id", "blur")
+  .attr("x", "-50%").attr("y", "-50%")
+  .attr("height", "250%").attr("width", "250%")
+  .append("feGaussianBlur").attr("in", "SourceGraphic").attr("stdDeviation", 25);
 
 container.selectAll("g.planet").data(planets).enter().append("g")
   .attr("class", "planet").each(function(d, i) {
     d3.select(this).append("circle").attr("class", "orbit")
-      .attr("r", d.R);
+      .attr("r", d.R).attr("filter", "url(#blur)");
   });
 
 
-container.append("image").attr("xlink:href","icons/icon1.png")
+container.append("image").attr("xlink:href","icons/Nicon1.png")
 .attr("width", 70).attr("x",400).attr("cy", 0).attr("class", "planet1")
 .on("mouseover", handleMouseOver).on("mouseout", handleMouseOut);
 
@@ -89,311 +121,288 @@ function handleMouseOut(d,i){
 }
 function handleMouseOver(d, i) {
   container.append("text").attr("x",-70).attr("y",60)
-   .text(Number(counts.chevron)+"   "+ "Chevron").attr("font-family","Montserrat").attr("font-size","50").style("fill","#BBCE32")
+   .text(Number(counts.chevron)+"   "+ "Chevron").attr("font-family","Montserrat").attr("font-size","50").style("fill","#faa916")
  }
 function handleMouseOver2(d, i) {
    container.append("text").attr("x",-70).attr("y",60)
-   .text(Number(counts.cigar)+"   "+ "Cigar").attr("font-family","Montserrat").attr("font-size","50").style("fill","#BBCE32")
+   .text(Number(counts.cigar)+"   "+ "Cigar")
+   .attr("font-family","VT323")
+   .attr("font-size","50").style("fill","#faa916")
 }
 function handleMouseOver3(d, i) {
     container.append("text").attr("x",-70).attr("y",60)
-     .text(Number(counts.circle)+"   "+ "Circle").attr("font-family","Montserrat").attr("font-size","50").style("fill","#BBCE32")
+     .text(Number(counts.circle)+"   "+ "Circle")
+     .attr("font-family","VT323")
+     .attr("font-size","50").style("fill","#faa916")
 }
 
 function handleMouseOver4(d, i) {
      container.append("text").attr("x",-70).attr("y",60)
-      .text(Number(counts.cone)+"   "+ "Cone").attr("font-family","Montserrat").attr("font-size","50").style("fill","#BBCE32")
+      .text(Number(counts.cone)+"   "+ "Cone")
+      .attr("font-family","VT323")
+      .attr("font-size","50").style("fill","#faa916")
 }
 function handleMouseOver5(d, i) {
       container.append("text").attr("x",-70).attr("y",60)
-       .text(Number(counts.crescent)+"   "+ "Crescent").attr("font-family","Montserrat").attr("font-size","50").style("fill","#BBCE32")
+       .text(Number(counts.crescent)+"   "+ "Crescent")
+       .attr("font-family","VT323")
+       .attr("font-size","50").style("fill","#faa916")
 }
 
 function handleMouseOver6(d, i) {
       container.append("text").attr("x",-70).attr("y",60)
-        .text(Number(counts.cross)+"   "+ "Cross").attr("font-family","Montserrat").attr("font-size","50").style("fill","#BBCE32")
+        .text(Number(counts.cross)+"   "+ "Cross")
+        .attr("font-family","VT323")
+        .attr("font-size","50").style("fill","#faa916")
       }
 
 function handleMouseOver7(d, i) {
       container.append("text").attr("x",-70).attr("y",60)
-         .text(Number(counts.cylinder)+"   "+ "Cylinder").attr("font-family","Montserrat").attr("font-size","50").style("fill","#BBCE32")
+         .text(Number(counts.cylinder)+"   "+ "Cylinder")
+         .attr("font-family","VT323")
+         .attr("font-size","50").style("fill","#faa916")
 }
 
 function handleMouseOver8(d, i) {
       container.append("text").attr("x",-70).attr("y",60)
-          .text(Number(counts.delta)+"   "+ "Delta").attr("font-family","Montserrat").attr("font-size","50").style("fill","#BBCE32")
+          .text(Number(counts.delta)+"   "+ "Delta")
+          .attr("font-family","VT323")
+          .attr("font-size","50").style("fill","#faa916")
 }
 
 function handleMouseOver9(d, i) {
       container.append("text").attr("x",-70).attr("y",60)
-           .text(Number(counts.diamond)+"   "+ "Diamond").attr("font-family","Montserrat").attr("font-size","50").style("fill","#BBCE32")
+           .text(Number(counts.diamond)+"   "+ "Diamond")
+           .attr("font-family","VT323")
+           .attr("font-size","50").style("fill","#faa916")
 }
 
 function handleMouseOver10(d, i) {
       container.append("text").attr("x",-70).attr("y",60)
-            .text(Number(counts.disk)+"   "+ "Disk").attr("font-family","Montserrat").attr("font-size","50").style("fill","#BBCE32")
+            .text(Number(counts.disk)+"   "+ "Disk")
+            .attr("font-family","VT323")
+            .attr("font-size","50").style("fill","#faa916")
 }
 
 function handleMouseOver11(d, i) {
       container.append("text").attr("x",-70).attr("y",60)
-             .text(Number(counts.dome)+"   "+ "Dome").attr("font-family","Montserrat").attr("font-size","50").style("fill","#BBCE32")
+             .text(Number(counts.dome)+"   "+ "Dome")
+             .attr("font-family","VT323")
+             .attr("font-size","50").style("fill","#faa916")
 }
 
-           function handleMouseOver12(d, i) {
-             container.append("text")
-              .attr("x",-70)
-              .attr("y",60)
+function handleMouseOver12(d, i) {
+             container.append("text").attr("x",-70).attr("y",60)
               .text(Number(counts.egg)+"   "+ "Egg")
-              .attr("font-family","Montserrat")
-              .attr("font-size","50")
-              .style("fill","#BBCE32")
+              .attr("font-family","VT323")
+              .attr("font-size","50").style("fill","#faa916")
             }
 
-            function handleMouseOver13(d, i) {
-              container.append("text")
-               .attr("x",-70)
-               .attr("y",60)
+function handleMouseOver13(d, i) {
+              container.append("text").attr("x",-70).attr("y",60)
                .text(Number(counts.fireball)+"   "+ "Fireball")
-               .attr("font-family","Montserrat")
-               .attr("font-size","50")
-               .style("fill","#BBCE32")
+               .attr("font-family","VT323")
+               .attr("font-size","50").style("fill","#faa916")
              }
 
-             function handleMouseOver14(d, i) {
-               container.append("text")
-                .attr("x",-70)
-                .attr("y",60)
+function handleMouseOver14(d, i) {
+               container.append("text").attr("x",-70).attr("y",60)
                 .text(Number(counts.flare)+"   "+ "Flare")
-                .attr("font-family","Montserrat")
-                .attr("font-size","50")
-                .style("fill","#BBCE32")
+                .attr("font-family","VT323")
+                .attr("font-size","50").style("fill","#faa916")
               }
 
-              function handleMouseOver15(d, i) {
-                container.append("text")
-                 .attr("x",-70)
-                 .attr("y",60)
+function handleMouseOver15(d, i) {
+                container.append("text").attr("x",-70).attr("y",60)
                  .text(Number(counts.flash)+"   "+ "Flash")
-                 .attr("font-family","Montserrat")
-                 .attr("font-size","50")
-                 .style("fill","#BBCE32")
+                 .attr("font-family","VT323")
+                 .attr("font-size","50").style("fill","#faa916")
                }
 
-               function handleMouseOver16(d, i) {
-                 container.append("text")
-                  .attr("x",-70)
-                  .attr("y",60)
+function handleMouseOver16(d, i) {
+                 container.append("text").attr("x",-70).attr("y",60)
                   .text(Number(counts.formation)+"   "+ "Formation")
-                  .attr("font-family","Montserrat")
-                  .attr("font-size","50")
-                  .style("fill","#BBCE32")
+                  .attr("font-family","VT323")
+                  .attr("font-size","50").style("fill","#faa916")
                 }
 
-                function handleMouseOver17(d, i) {
-                  container.append("text")
-                   .attr("x",-70)
-                   .attr("y",60)
+function handleMouseOver17(d, i) {
+                  container.append("text").attr("x",-70).attr("y",60)
                    .text(Number(counts.hexagon)+"   "+ "Hexagon")
-                   .attr("font-family","Montserrat")
-                   .attr("font-size","50")
-                   .style("fill","#BBCE32")
+                   .attr("font-family","VT323")
+                   .attr("font-size","50").style("fill","#faa916")
                  }
-
-                 function handleMouseOver18(d, i) {
-                   container.append("text")
-                    .attr("x",-70)
-                    .attr("y",60)
+function handleMouseOver18(d, i) {
+                   container.append("text").attr("x",-70).attr("y",60)
                     .text(Number(counts.light)+"   "+ "Light")
-                    .attr("font-family","Montserrat")
-                    .attr("font-size","50")
-                    .style("fill","#BBCE32")
+                    .attr("font-family","VT323")
+                    .attr("font-size","50").style("fill","#faa916")
                   }
 
-                  function handleMouseOver19(d, i) {
-                    container.append("text")
-                     .attr("x",-70)
-                     .attr("y",60)
+function handleMouseOver19(d, i) {
+                    container.append("text").attr("x",-70).attr("y",60)
                      .text(Number(counts.oval)+"   "+ "Oval")
-                     .attr("font-family","Montserrat")
-                     .attr("font-size","50")
-                     .style("fill","#BBCE32")
+                     .attr("font-family","VT323")
+                     .attr("font-size","50").style("fill","#faa916")
                    }
 
-                   function handleMouseOver20(d, i) {
-                     container.append("text")
-                      .attr("x",-70)
-                      .attr("y",60)
+function handleMouseOver20(d, i) {
+                     container.append("text").attr("x",-70).attr("y",60)
                       .text(Number(counts.pyramid)+"   "+ "Pyramid")
-                      .attr("font-family","Montserrat")
-                      .attr("font-size","50")
-                      .style("fill","#BBCE32")
+                      .attr("font-family","VT323").attr("font-size","50")
+                      .style("fill","#faa916")
                     }
 
-                    function handleMouseOver21(d, i) {
-                      container.append("text")
-                       .attr("x",-70)
-                       .attr("y",60)
+function handleMouseOver21(d, i) {
+                      container.append("text").attr("x",-70).attr("y",60)
                        .text(Number(counts.rectangle)+"   "+ "Rectangle")
-                       .attr("font-family","Montserrat")
-                       .attr("font-size","50")
-                       .style("fill","#BBCE32")
+                       .attr("font-family","VT323")
+                       .attr("font-size","50").style("fill","#faa916")
                      }
 
-                     function handleMouseOver22(d, i) {
-                       container.append("text")
-                        .attr("x",-70)
-                        .attr("y",60)
+function handleMouseOver22(d, i) {
+                       container.append("text").attr("x",-70).attr("y",60)
                         .text(Number(counts.round)+"   "+ "Round")
-                        .attr("font-family","Montserrat")
-                        .attr("font-size","50")
-                        .style("fill","#BBCE32")
+                        .attr("font-family","VT323").attr("font-size","50")
+                        .style("fill","#faa916")
                       }
 
-                      function handleMouseOver23(d, i) {
-                        container.append("text")
-                         .attr("x",-70)
-                         .attr("y",60)
-                         .text(Number(counts.sphere)+"   "+ "Sphere")
-                         .attr("font-family","Montserrat")
-                         .attr("font-size","50")
-                         .style("fill","#BBCE32")
+function handleMouseOver23(d, i) {
+                container.append("text").attr("x",-70).attr("y",60)
+                        .text(Number(counts.sphere)+"   "+ "Sphere")
+                        .attr("font-family","VT323").attr("font-size","50")
+                         .style("fill","#faa916")
                        }
 
-                       function handleMouseOver24(d, i) {
-                         container.append("text")
-                          .attr("x",-70)
-                          .attr("y",60)
+function handleMouseOver24(d, i) {
+                container.append("text").attr("x",-70).attr("y",60)
                           .text(Number(counts.teardrop)+"   "+ "Teardrop")
-                          .attr("font-family","Montserrat")
-                          .attr("font-size","50")
-                          .style("fill","#BBCE32")
+                          .attr("font-family","VT323").attr("font-size","50")
+                          .style("fill","#faa916")
                         }
 
-                        function handleMouseOver25(d, i) {
-                          container.append("text")
-                           .attr("x",-70)
-                           .attr("y",60)
-                           .text(Number(counts.triangle)+"   "+ "Triangle")
-                           .attr("font-family","Montserrat")
-                           .attr("font-size","50")
-                           .style("fill","#BBCE32")
+function handleMouseOver25(d, i) {
+              container.append("text").attr("x",-70).attr("y",60)
+                    .text(Number(counts.triangle)+"   "+ "Triangle")
+                    .attr("font-family","VT323").attr("font-size","50")
+                    .style("fill","#faa916")
                          }
-container.append("image").attr("xlink:href","icons/icon2.png")
+container.append("image").attr("xlink:href","icons/Nicon2.png")
 .attr("width", 70).attr("x",300).attr("cy", 0).attr("class", "planet2")
 .on("mouseover", handleMouseOver2)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon3.png")
+container.append("image").attr("xlink:href","icons/Nicon3.png")
 .attr("width", 70).attr("x",200).attr("cy", 0).attr("class", "planet3")
 .on("mouseover", handleMouseOver3)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon4.png")
+container.append("image").attr("xlink:href","icons/Nicon4.png")
 .attr("width", 70).attr("x",300).attr("cy", 0).attr("class", "planet4")
 .on("mouseover", handleMouseOver4)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon5.png")
+container.append("image").attr("xlink:href","icons/Nicon5.png")
 .attr("width", 70).attr("x",400).attr("cy", 0).attr("class", "planet5")
 .on("mouseover", handleMouseOver5)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon6.png")
+container.append("image").attr("xlink:href","icons/Nicon6.png")
 .attr("width", 70).attr("x",300).attr("cy", 0).attr("class", "planet6")
 .on("mouseover", handleMouseOver6)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon7.png")
+container.append("image").attr("xlink:href","icons/Nicon7.png")
 .attr("width", 70).attr("x",400).attr("cy", 0).attr("class", "planet7")
 .on("mouseover", handleMouseOver7)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon8.png")
+container.append("image").attr("xlink:href","icons/Nicon8.png")
 .attr("width", 70).attr("x",300).attr("cy", 0).attr("class", "planet8")
 .on("mouseover", handleMouseOver8)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon9.png")
+container.append("image").attr("xlink:href","icons/Nicon9.png")
 .attr("width", 70).attr("x",400).attr("cy", 0).attr("class", "planet9")
 .on("mouseover", handleMouseOver9)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon10.png")
+container.append("image").attr("xlink:href","icons/Nicon10.png")
 .attr("width", 70).attr("x",200).attr("cy", 0).attr("class", "planet10")
 .on("mouseover", handleMouseOver10)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon11.png")
+container.append("image").attr("xlink:href","icons/Nicon11.png")
 .attr("width", 70).attr("x",360).attr("cy", 0).attr("class", "planet11")
 .on("mouseover", handleMouseOver11)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon12.png")
+container.append("image").attr("xlink:href","icons/Nicon12.png")
 .attr("width", 70).attr("x",370).attr("cy", 0).attr("class", "planet12")
 .on("mouseover", handleMouseOver12)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon13.png")
+container.append("image").attr("xlink:href","icons/Nicon13.png")
 .attr("width", 50).attr("x",200).attr("cy", 0).attr("class", "planet13")
 .on("mouseover", handleMouseOver13)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon14.png")
+container.append("image").attr("xlink:href","icons/Nicon14.png")
 .attr("width", 70).attr("x",200).attr("cy", 0).attr("class", "planet14")
 .on("mouseover", handleMouseOver14)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon15.png")
+container.append("image").attr("xlink:href","icons/Nicon15.png")
 .attr("width", 50).attr("x",300).attr("cy", 0).attr("class", "planet15")
 .on("mouseover", handleMouseOver15)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon16.png")
+container.append("image").attr("xlink:href","icons/Nicon16.png")
 .attr("width", 90).attr("x",400).attr("cy", 0).attr("class", "planet16")
 .on("mouseover", handleMouseOver16)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon17.png")
+container.append("image").attr("xlink:href","icons/Nicon17.png")
 .attr("width", 70).attr("x",130).attr("cy", 0).attr("class", "planet17")
 .on("mouseover", handleMouseOver17)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon18.png")
+container.append("image").attr("xlink:href","icons/Nicon18.png")
 .attr("width", 50).attr("x",220).attr("cy", 0).attr("class", "planet18")
 .on("mouseover", handleMouseOver18)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon19.png")
+container.append("image").attr("xlink:href","icons/Nicon19.png")
 .attr("width", 70).attr("x",280).attr("cy", 0).attr("class", "planet19")
 .on("mouseover", handleMouseOver19)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon20.png")
+container.append("image").attr("xlink:href","icons/Nicon20.png")
 .attr("width", 70).attr("x",200).attr("cy", 0).attr("class", "planet20")
 .on("mouseover", handleMouseOver20)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon21.png")
+container.append("image").attr("xlink:href","icons/Nicon21.png")
 .attr("width", 70).attr("x",120).attr("cy", 0).attr("class", "planet16")
 .on("mouseover", handleMouseOver21)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon22.png")
+container.append("image").attr("xlink:href","icons/Nicon22.png")
 .attr("width", 70).attr("x",400).attr("cy", 0).attr("class", "planet17")
 .on("mouseover", handleMouseOver22)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon23.png")
+container.append("image").attr("xlink:href","icons/Nicon23.png")
 .attr("width", 70).attr("x",300).attr("cy", 0).attr("class", "planet18")
 .on("mouseover", handleMouseOver23)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon24.png")
+container.append("image").attr("xlink:href","icons/Nicon24.png")
 .attr("width", 50).attr("x",450).attr("cy", 0).attr("class", "planet19")
 .on("mouseover", handleMouseOver24)
 .on("mouseout", handleMouseOut);
 
-container.append("image").attr("xlink:href","icons/icon25.png")
+container.append("image").attr("xlink:href","icons/Nicon25.png")
 .attr("width", 70).attr("x",350).attr("cy", 0).attr("class", "planet20")
 .on("mouseover", handleMouseOver25)
 .on("mouseout", handleMouseOut);
