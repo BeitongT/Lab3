@@ -1,5 +1,8 @@
 
+function light() {
 /*this is drawing a us map in perspective*/
+  window.scrollTo(0,0);
+
 
 var width = window.screen.width;
     height = 820;
@@ -12,12 +15,14 @@ var projection = d3.geo.orthographic()
 
     projection.rotate([97, 23]); //rotate the sphere
 
+
 //create the canvas
 var canvas = d3.select("#ufoLine").append("canvas")
     .attr("x", 0)
     .attr("y", 0)
     .attr("width", width)
-    .attr("height", height)
+    .attr("height", height);
+
 
 //create the context
 var context = canvas.node().getContext("2d");
@@ -33,7 +38,7 @@ var graticule = d3.geo.graticule();
 
 queue()
   .defer(d3.json, "./world-50m.json")
-  .defer(d3.csv, "./ufo-sightings/scrubbed.csv")
+  .defer(d3.csv, "./scrubbed.csv")
   .await(callback);
 
 
@@ -43,6 +48,7 @@ function callback (error, world, ufoData) {
 
   /*start map*/
     var countries = topojson.feature(world, world.objects.countries);
+    
     var land = topojson.feature(world, world.objects.land);
     var USA = countries.features.filter(function(d,i){if(d.id == 840) console.log(i);return d.id == 840;});
     var sphere = {type: "Sphere"};
@@ -88,7 +94,7 @@ function callback (error, world, ufoData) {
 
   //filter out other countries and Hawaii state 
   var smallerData = ufoData.filter(function(d){
-    return d.country == "us" && d.state != "hi";  
+    return d.country == "us" && d.state != "hi" && d.year != undefined && d.year != "";  
   });
 
   //get the data length to stop the timer 
@@ -101,6 +107,11 @@ function callback (error, world, ufoData) {
     return tempResult;
    });
 
+console.log(smallerData);
+  var yearArray = smallerData.map(function(d){
+    return d.year;
+  });
+console.log(yearArray);
 
 /*animation
     A: Some lines slowly appear
@@ -113,7 +124,7 @@ function callback (error, world, ufoData) {
   var speedStep = 2;  // the whole animation speed || recommend 300
   var numberA = 5; //how many lines will process the start animation
   var durationA = 1000; //line animation A time
-  var durationB = 200; //line animation B time
+  var durationB = 500; //line animation B time
   var parentX = width / 2;  //startPointX
   var parentY = 80;         //startPointY
 
@@ -129,6 +140,17 @@ function callback (error, world, ufoData) {
 
     var start = null;
     
+    var year = yearArray[counter];
+
+     var number = d3.select("#changeNumber");
+      number.style("color","white");
+        number.transition()
+        .duration(2500)
+        .text(year);
+
+
+
+
     var step = function animatePathDrawingStep(timestamp) {
         if (start === null)
             start = timestamp;
@@ -189,6 +211,15 @@ function callback (error, world, ufoData) {
     var controlX = (parentX + childX) / 2 - differenceX * factor;
     var controlY = (parentY + childY) / 2;
 
+    var year = yearArray[counter];
+
+ var number = d3.select("#changeNumber");
+ number.style("color",d3.hsl(30,1,1-0.5*counter/dataLength));
+    number.transition()
+    .duration(2500)
+    .text(year);
+
+
     var start = null;
     
     var step = function animatePathDrawingStep(timestamp) {
@@ -223,6 +254,7 @@ function callback (error, world, ufoData) {
                 context.stroke();
         }
     };
+
     
     window.requestAnimationFrame(step);
 
@@ -314,11 +346,13 @@ var timerFunction3 = function () {
  * Linearly interpolate between two numbers v0, v1 by t
  */
  
-function lerp(v0, v1, t) {
-    return ( 1.0 - t ) * v0 + t * v1;
-}
+    function lerp(v0, v1, t) {
+        return ( 1.0 - t ) * v0 + t * v1;
+    }
 
-}
+    }
+};
 
+light();
   
 

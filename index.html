@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
+  /* section 1 */
+
   body {
     background: #000000;
+    font-family: 'PT Mono', monospace;
   }
 
-  .stroke {
-    fill: none;
-    stroke: #000;
-    stroke-width: 3px;
-  }
-
-  .fill {
-    fill: rgb(10, 10, 10);
+  h1,
+  h2,
+  p {
+    font-family: 'PT Mono', monospace;
+    text-shadow: 2px 2px 15px rgb(255, 1, 1);
+    line-height: 1em;
+    font-weight: 900;
+    color: #fff;
   }
 
   .graticule {
@@ -34,8 +37,9 @@
     stroke-width: 1px;
   }
 
-  #ufoLine{
-    margin: auto;
+  #ufoLine {
+    position: absolute;
+    margin-top: 50px;
     height: 800px;
   }
 
@@ -44,7 +48,7 @@
     left: 50%;
     margin-left: -150px;
     width: 300px;
-    filter: drop-shadow( -5px -5px 5px rgb(131, 14, 14));
+    filter: drop-shadow( -5px 10px 12px rgb(131, 14, 14));
     transform: rotate(-20deg);
     -webkit-animation: ufo 5s linear 2s infinite alternate;
     /* Safari 4.0 - 8.0 */
@@ -90,19 +94,391 @@
       transform: rotate(-20deg)
     }
   }
+
+  /* Legend Font Style */
+
+  #introdunction {
+
+    font-family: 'Unica One', cursive;
+    letter-spacing: 10px;
+    text-align: center;
+    font-size: 40px;
+  }
+
+  #introdunction3 {
+    font-family: 'Unica One', cursive;
+    width: 830px;
+    overflow: hidden;
+    /* Ensures the content is not revealed until the animation */
+    border-right: .15em solid orange;
+    /* The typwriter cursor */
+    white-space: nowrap;
+    /* Keeps the content on a single line */
+    margin: auto;
+    /* Gives that scrolling effect as the typing happens */
+    letter-spacing: 5px;
+    font-size: 25px;
+    animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+  }
+
+  #introdunction2 {
+    position: absolute;
+    font-family: 'Unica One', cursive;
+
+    top: 200px;
+    left: 200px;
+    font-size: 50px;
+  }
+
+  #introdunction4 {
+    position: absolute;
+    font-family: 'Unica One', cursive;
+    top: 200px;
+    left: 1240px;
+    font-size: 50px;
+  }
+
+  #changeNumber {
+    position: absolute;
+    font-family: 'Unica One', cursive;
+    top: 190px;
+    left: 1300px;
+    font-size: 50px;
+  }
+
+  /* The typing effect */
+
+  @keyframes typing {
+    from {
+      width: 0
+    }
+    to {
+      width: 50%
+    }
+  }
+
+  @keyframes typing2 {
+    from {
+      width: 0
+    }
+    to {
+      width: 120px;
+    }
+  }
+
+  /* The typewriter cursor effect */
+
+  @keyframes blink-caret {
+    from,
+    to {
+      border-color: transparent
+    }
+    50% {
+      border-color: orange;
+    }
+  }
+
+
+
+  /* section 2*/
+
+  /* On mouse hover, lighten state color */
+
+  path:hover {
+    fill-opacity: .7;
+  }
+
+  .infobox {
+    position: absolute;
+    top: 20px;
+    right: 50px;
+  }
+
+  p.infobox {
+    color: #fff;
+    /*font-size: px;*/
+  }
+
+  .totalN {
+    position: absolute;
+    /*right:50px;*/
+    /*top: 900px;*/
+    /*padding:-500px;*/
+  }
+
+  .totalN p {
+    font-size: 100px;
+  }
+
+  .canvas-wrapper {
+    position: relative;
+
+    /*border: 1px solid black;*/
+  }
+
+  .main {
+    position: absolute;
+  }
+
+  #tooltip {
+    position: absolute;
+    display: inline-block;
+    padding: 10px;
+    font-family: 'PT Mono', monospace;
+    color: rgb(197, 0, 0);
+    text-shadow: 2px 2px 15px rgb(255, 1, 1);
+    background-color: rgb(0, 0, 0);
+    border: 1px solid rgb(112, 2, 2);
+    border-radius: 2px;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 1;
+  }
+
+  #content {
+    position: absolute;
+    margin: 25px;
+    width: 100%;
+    top: 1000px;
+    left: 30px;
+    /*border: 1px solid #ccc;*/
+  }
+
+  .map {
+    margin-right: 25px;
+  }
+
+  .section2 {
+    width: 830px;
+    overflow: hidden;
+    /* Ensures the content is not revealed until the animation */
+    border-right: .15em solid orange;
+    /* The typwriter cursor */
+    white-space: nowrap;
+    /* Keeps the content on a single line */
+    margin-left: 0px;
+    /* Gives that scrolling effect as the typing happens */
+    letter-spacing: 1px;
+    font-size: 25px;
+    animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+  }
+
+  h2.year,
+  h2.count {
+    font-family: 'PT Mono', monospace;
+    margin: 5px 0px 0px 0px;
+    font-size: 1.3em;
+    font-weight: 700;
+  }
+
+
+  input {
+    display: block;
+    width: 200px;
+    margin: 10px 0px 0px 0px;
+  }
+
+  .states {
+    fill: #f5eede;
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+
+  .openings {
+    fill: #f5eede;
+    stroke: #8D0600;
+    stroke-width: 2;
+  }
+
+  .openings:hover {
+    fill: #8D0600;
+  }
+
+  .locations {
+    fill: #f5eede;
+    stroke: #C0392B;
+    stroke-width: 1;
+    opacity: 0.7;
+  }
+
+  .tooltip {
+    position: absolute;
+    padding: 7px;
+    font-size: 0.9em;
+    pointer-events: none;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -moz-box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.25);
+    -webkit-box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.25);
+  }
+
+  .tooltip p {
+    margin: 0;
+    padding: 0;
+  }
+
+  .orbit {
+    stroke: #6e0400;
+    stroke-width: 14px;
+    fill: black;
+  }
+
+  .shapecount {
+    font-family: 'Unica One', cursive;
+    text-shadow: 2px 2px 10px rgb(255, 1, 1);
+    font-size: 30px;
+    fill: #faa916;
+  }
+
+  .planet {
+    stroke: #000000;
+    fill: #FFFFFF;
+  }
+
+  .svg2 {
+    stroke: #FFFFFF;
+    stroke-width: 1px;
+  }
+
+  #box {
+    float: left;
+  }
+
+  #shape {
+    position: absolute;
+    top: 2200px;
+  }
+
+  .shapedetails {
+    position: absolute;
+    font-family: 'Unica One', cursive;
+    overflow: hidden;
+    /* Ensures the content is not revealed until the animation */
+    /* border-right: .15em solid orange; */
+    /* The typwriter cursor */
+    white-space: nowrap;
+    /* Keeps the content on a single line */
+    margin-left: 1040px;
+    margin-top: 100px;
+    /* Gives that scrolling effect as the typing happens */
+    letter-spacing: 1px;
+    font-size: 25px;
+  }
+
+  .shapedetails p:nth-child(4) {
+    border-right: .15em solid orange;
+    font-size: 40px;
+    width: 130px;
+    animation: typing2 1s steps(500, end), blink-caret .75s step-end infinite;
+  }
+
+  .shapedetails p:nth-child(5) {
+    font-size: 15px;
+    /* width: 120px; */
+    /* animation: typing2 1s steps(500, end), blink-caret .75s step-end infinite; */
+  }
+  .shapedetails p:nth-child(6) {
+    font-size: 15px;
+    margin-top:500px;
+    /* width: 120px; */
+    /* animation: typing2 1s steps(500, end), blink-caret .75s step-end infinite; */
+  }
+  h3 {
+    font-family: 'PT Mono', monospace;
+    text-shadow: 2px 2px 15px rgb(255, 1, 1);
+    line-height: 1em;
+    font-weight: 900;
+    color: #fff;
+  }
 </style>
 
+
+<!-- <button onclick="myFunction()">Scroll</button> -->
+
+<!-- first -->
+
 <body>
-<div id="ufoLine">
-<img id="ufo" src="./ufo.svg"/>
-</div>
+  <h1 id="introdunction"> A L I E N S / A R R I V E </h1>
+  <h1 id="introdunction3">A UFO sightings review in the last century in the U.S.</h1>
+  <h2 id="introdunction2"> From 1931</h2>
+  <h2 id="introdunction4"> to </h2>
+  <p id="changeNumber" style="color:white">1931</p>
+
+  <div id="ufoLine">
+    <img id="ufo" src="./ufo.svg" />
+  </div>
+
+
+  <!-- second -->
+  <!-- <center>
+    <h1 id="scroll">Scroll Down &amp View Next </h1>
+  </center> -->
+  <div id="content">
+    <h1 class="section2">The number of sightings is increasing from year 1931.</h1>
+    <h2 class="year">Move the slider to see this trend:</h2>
+    <h2 class="count"></h2>
+    <input id="menu" type="range" min="1930" max="2014" step="1" value="1949" />
+    <div class="totalN">
+      <h2 class="total"></h2>
+      <p class="transition"></p>
+    </div>
+    <div id="map"></div>
+    <!-- <script type="text/javascript" src="map.js"></script> -->
+  </div>
+
+
+  <div id="tooltip"></div>
+
+  <div class="canvas-wrapper" id="scrollBody" style="top:1100px">
+  </div>
+
+  <!-- third -->
+  <div id="shape">
+    <h1 class="shapedetails">
+      <p>How does UFO look like?</p>
+      <p>There are 25 reported UFO shapes.</p>
+      <p>Total "light" appeared times:</p>
+      <p>16565</p>
+      <p>hover over a shape to check its reported count.</p>
+      <p>by Zhengnan Zhao, Beitong Tian，Shuran Li，Hanchun Shao</p>
+  </div>
+
+ 
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+<link href="https://fonts.googleapis.com/css?family=Comfortaa|Poiret+One" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Righteous" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=VT323" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=PT+Mono|Rokkitt|Unica+One" rel="stylesheet">
+<!-- <script src="https://d3js.org/d3.v4.0.0-alpha.23.min.js"></script>
+ -->
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script src="https://d3js.org/queue.v1.min.js"></script>
-
+<script src="https://unpkg.com/topojson-client@3"></script>
 <!-- <script src="//d3js.org/d3.v4.min.js"></script> -->
-
 <script src="https://d3js.org/topojson.v1.min.js"></script>
 <script src="https://d3js.org/d3-timer.v1.min.js"></script>
 
+<script>
+  // window.scrollTo(0,0);
+
+
+  // $(window).scroll(function(e) {
+
+  //     var current = $(this).scrollTop();
+
+  //     if (current >){
+
+  //     }
+
+  // });
+</script>
 <script src="./alien_arrive.js"></script>
+<script src="./ufomap.js"></script>
+<script src="./shape.js"></script>
+<!-- <script src=""></script> -->
